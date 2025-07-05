@@ -60,4 +60,9 @@ public class Player : MonoBehaviour
         //Runs coroutine to stop instant scene switching 
         StartCoroutine(GameManger.instance.GameEnd(false));
     }
+
+    public Rigidbody2D GetRigidbody2D()
+    {
+        return rb;
+    }
 }

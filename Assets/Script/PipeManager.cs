@@ -10,9 +10,10 @@ public class PipeManager : MonoBehaviour
     [SerializeField] GameObject pipePrefab;
 
     [SerializeField] Vector2[] pipePositions;
+    List<Vector2> pipePositionsList = new List<Vector2>();
     
     //Dicates how much space player has to play with. Smaller more difficult it will be
-    [SerializeField,Range(5,20)] int pipeOpeningOffset;
+    [SerializeField] int pipeOpeningOffset;
     
     [SerializeField] int maxAdditionalSpeed;
     [SerializeField] int spawnRate;
@@ -28,6 +29,11 @@ public class PipeManager : MonoBehaviour
     {
         GameManger.instance.OnPause += PipeManager_OnPause;
         GameManger.instance.OnResume += PipeManager_OnResume;
+    }
+
+    void Start()
+    {
+        pipePositionsList = GeneratePipePositions();
     }
 
     void PipeManager_OnResume(object sender, EventArgs e)
@@ -69,15 +75,7 @@ public class PipeManager : MonoBehaviour
         }
         else
         {
-            while (true)
-            {
-                spawnPos = new Vector2(Random.Range(0, 15), Random.Range(0, 15));
-
-                if (spawnPos.x + spawnPos.y > 20 + pipeOpeningOffset)
-                {
-                    break;
-                }
-            }
+            spawnPos = pipePositionsList[Random.Range(0, pipePositionsList.Count)];
         }
 
         GameObject topPipe = Instantiate(pipePrefab, this.transform.position, Quaternion.identity);
@@ -91,5 +89,22 @@ public class PipeManager : MonoBehaviour
         
         topPipe.GetComponent<Pipe>().SetSpeed(newPipeSpeed);
         bottomPipe.GetComponent<Pipe>().SetSpeed(newPipeSpeed);
+    }
+
+    List<Vector2> GeneratePipePositions()
+    {
+        List<Vector2> pipePositions = new List<Vector2>();
+        
+        for (int i = 0; i < 15; i++)
+        {
+            for (int j = 0; j < 15; j++)
+            {
+                if (i + j > 20 + pipeOpeningOffset)
+                {
+                   pipePositions.Add(new Vector2(i, j));
+                }
+            }
+        }
+        return pipePositions;
     }
 }
