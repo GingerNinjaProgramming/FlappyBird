@@ -23,16 +23,12 @@ public class PipeManager : MonoBehaviour
     
     //To toggle pipe spawning
     bool isSpawning = true;
-
-
-    void Awake()
+    
+    void Start()
     {
         GameManger.instance.OnPause += PipeManager_OnPause;
         GameManger.instance.OnResume += PipeManager_OnResume;
-    }
-
-    void Start()
-    {
+        
         pipePositionsList = GeneratePipePositions();
     }
 

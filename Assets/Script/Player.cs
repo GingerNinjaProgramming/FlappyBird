@@ -53,9 +53,8 @@ public class Player : MonoBehaviour
     /// </summary>
     void PlayerDie()
     {
+        if (force == 0) return;
         force = 0;
-        
-        GameManger.instance.TogglePause();
         
         //Runs coroutine to stop instant scene switching 
         StartCoroutine(GameManger.instance.GameEnd(false));

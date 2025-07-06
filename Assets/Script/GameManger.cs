@@ -38,6 +38,11 @@ public class GameManger : MonoBehaviour
         scoreText.text = score.ToString();
     }
 
+    void GameBegin()
+    {
+        // Add a three two one need to change pause function to make this work more logically
+    }
+
     public void AddScore(float value)
     {
         score += value;
@@ -46,12 +51,14 @@ public class GameManger : MonoBehaviour
 
     public IEnumerator GameEnd(bool isWin)
     {
+        TogglePause(false);
+        
         yield return new WaitForSecondsRealtime(5f);
         
         //Load death scene
         if (!isWin)
         {
-            SceneManager.LoadScene(1);
+            SceneManager.LoadScene("Death");
         }
         else
         {
@@ -59,8 +66,17 @@ public class GameManger : MonoBehaviour
         }
     }
 
-    public void TogglePause()
+    public void TogglePause(bool isFullPause)
     {
+        if (isFullPause)
+        {
+            Time.timeScale = isPaused ? 1 : 0;
+            
+            isPaused = FlipBool(isPaused);
+            
+            return;
+        }
+        
         if (isPaused)
         {
             //UnPause
@@ -72,5 +88,12 @@ public class GameManger : MonoBehaviour
             //Pause
             OnPause?.Invoke(this, EventArgs.Empty);
         }
+
+        isPaused = FlipBool(isPaused);
+    }
+
+    bool FlipBool(bool value)
+    {
+        return !value;
     }
 }
